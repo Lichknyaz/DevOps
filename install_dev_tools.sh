@@ -1,56 +1,50 @@
 #!/usr/bin/env bash
 set -e
 
-# Must be run as root
+# Run as root
 if [ "$(id -u)" -ne 0 ]; then
-   echo "Run with sudo"
-   exit 1
+  echo "Run with sudo"
+  exit 1
 fi
 
-# Update package list once
 apt-get update -y
 
-
-# Docker
+# Docker 
 if ! command -v docker >/dev/null 2>&1; then
-	apt-get install -y ca-certificates curl gnupg lsb-release
+  apt-get install -y ca-certificates curl gnupg lsb-release
 
+  mkdir -p /etc/apt/keyrings
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
+    | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  chmod a+r /etc/apt/keyrings/docker.gpg
 
-	mkdir -p /etc/apt/keyrings
-	curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
-	| gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+https://download.docker.com/linux/ubuntu \
+$(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
+  > /etc/apt/sources.list.d/docker.list
 
-	echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
-		  https://download.docker.com/linux/ubuntu \
-		  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
-		  > /etc/apt/sources.list.d/docker.list
-
-     	apt-get update -y
-     	apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+  apt-get update -y
+  apt-get install -y docker-ce docker-ce-cli containerd.io
 fi
 
-#Python 3
-
+#Python 3.9+ 
 if ! command -v python3 >/dev/null 2>&1 || \
-	! python3 -c "import sys; exit(0 if sys.version_info >= (3,9) else 1)"; then
-	apt-get install -y python3 python3-pip
+   ! python3 -c "import sys; exit(0 if sys.version_info >= (3,9) else 1)"; then
+  apt-get install -y python3 python3-pip
 fi
 
-#Django
-
-VENV_DIR="./.venv"
-
-#ensure venv + pip exist
-apt-get install -y python3-venv python3-pip
-
-if [ ! -d "$VENV_DIR" ]; then
-	python3 -m venv "$VENV_DIR"
+# pip
+if ! command -v pip3 >/dev/null 2>&1; then
+  apt-get install -y python3-pip
 fi
 
-# install Django only if missing in venv
-if ! "$VENV_DIR/bin/python" -c "import django" >/dev/null 2>&1; then
-	"$VENV_DIR/bin/pip" install --upgrade pip
-	"$VENV_DIR/bin/pip" install django
+# Django
+if ! python3 -c "import django" >/dev/null 2>&1; then
+  pip3 install --upgrade pip
+  pip3 install django || pip3 install django --break-system-packages
 fi
 
 echo "Installation finished."
+docker --version 2>/dev/null || true
+python3 --version 2>/dev/null || true
+python3 -c "import django; print('Django', django.get_version())" 2>/dev/null || true
