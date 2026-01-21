@@ -1,0 +1,23 @@
+image:
+  repository: ""
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 8000
+
+config:
+  env:
+    POSTGRES_PORT: "5432"
+    POSTGRES_HOST: "db"
+    POSTGRES_USER: "django_user"
+    POSTGRES_DB: "django_db"
+    POSTGRES_PASSWORD: "pass9764gd"
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
