@@ -1,0 +1,28 @@
+applications:
+  - name: example-app
+    namespace: default
+    project: default
+    source:
+      repoURL: https://github.com/Lichknyaz/example-repo.git
+      path: charts/django-app
+      targetRevision: main
+      helm:
+        valueFiles:
+          - values.yaml
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: default
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+
+repositories:
+  - name: example-app
+    url: https://github.com/Lichknyaz/example-repo.git
+    username: Lichknyaz
+    password: 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
+
+repoConfig:
+  insecure: "true"
+  enableLfs: "true"
