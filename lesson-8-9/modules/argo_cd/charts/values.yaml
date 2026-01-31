@@ -21,7 +21,7 @@ repositories:
   - name: example-app
     url: https://github.com/Lichknyaz/example-repo.git
     username: Lichknyaz
-    password: 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
+    password: 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
 
 repoConfig:
   insecure: "true"
