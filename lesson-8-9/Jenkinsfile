@@ -30,11 +30,10 @@ spec:
   }
 
   environment {
-    ECR_REGISTRY = "397114334021.dkr.ecr.us-west-2.amazonaws.com"
-    IMAGE_NAME   = "app"
+    ECR_REPO_URL = "961906078703.dkr.ecr.eu-west-1.amazonaws.com/lesson-8-9-django-ecr"
     IMAGE_TAG    = "${BUILD_NUMBER}"
     CHART_REPO_URL = "https://github.com/Lichknyaz/example-repo.git"
-    CHART_PATH   = "django-chart"
+    CHART_PATH   = "charts/django-app"
     CHART_VALUES = "values.yaml"
   }
 
@@ -46,7 +45,7 @@ spec:
             /kaniko/executor \\
               --context `pwd` \\
               --dockerfile `pwd`/Dockerfile \\
-              --destination=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG \\
+              --destination=$ECR_REPO_URL:$IMAGE_TAG \\
               --cache=true \\
               --insecure \\
               --skip-tls-verify
