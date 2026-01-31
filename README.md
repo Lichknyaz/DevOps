@@ -1,4 +1,4 @@
-# lesson-7
+# lesson-8-9
 
 ## Overview
 
@@ -7,7 +7,8 @@ Terraform configuration for AWS infrastructure (S3 backend, VPC, ECR, EKS) and a
 ## Project Structure
 
 ```
-lesson-7/
+
+lesson-8-9/
 │
 ├── main.tf                  # Головний файл для підключення модулів
 ├── backend.tf               # Налаштування бекенду для стейтів (S3 + DynamoDB)
@@ -30,11 +31,31 @@ lesson-7/
 │   │   ├── variables.tf     # Змінні для ECR
 │   │   └── outputs.tf       # Виведення URL репозиторію
 │   │
-│   ├── eks/                 # Модуль для Kubernetes кластера
-│   │   ├── eks.tf           # Створення кластера
+│   ├── eks/                      # Модуль для Kubernetes кластера
+│   │   ├── eks.tf                # Створення кластера
+│   │   ├── aws_ebs_csi_driver.tf # Встановлення плагіну csi drive
 │   │   ├── variables.tf     # Змінні для EKS
 │   │   └── outputs.tf       # Виведення інформації про кластер
-│
+│   │
+│   ├── jenkins/             # Модуль для Helm-установки Jenkins
+│   │   ├── jenkins.tf       # Helm release для Jenkins
+│   │   ├── variables.tf     # Змінні (ресурси, креденшели, values)
+│   │   ├── providers.tf     # Оголошення провайдерів
+│   │   ├── values.yaml      # Конфігурація jenkins
+│   │   └── outputs.tf       # Виводи (URL, пароль адміністратора)
+│   │
+│   └── argo_cd/             # ✅ Новий модуль для Helm-установки Argo CD
+│       ├── jenkins.tf       # Helm release для Jenkins
+│       ├── variables.tf     # Змінні (версія чарта, namespace, repo URL тощо)
+│       ├── providers.tf     # Kubernetes+Helm.  переносимо з модуля jenkins
+│       ├── values.yaml      # Кастомна конфігурація Argo CD
+│       ├── outputs.tf       # Виводи (hostname, initial admin password)
+│		    └──charts/                  # Helm-чарт для створення app'ів
+│ 	 	    ├── Chart.yaml
+│	  	    ├── values.yaml          # Список applications, repositories
+│			    └── templates/
+│		        ├── application.yaml
+│		        └── repository.yaml
 ├── charts/
 │   └── django-app/
 │       ├── templates/
@@ -44,6 +65,8 @@ lesson-7/
 │       │   └── hpa.yaml
 │       ├── Chart.yaml
 │       └── values.yaml     # ConfigMap зі змінними середовища
+
+
 ```
 
 ## Prerequisites
@@ -108,7 +131,7 @@ terraform output -raw ecr_repository_url
 1. Configure kubectl for EKS:
 
 ```bash
-aws eks update-kubeconfig --name lesson-7-eks --region eu-west-1
+aws eks update-kubeconfig --name lesson-8-9-eks --region eu-west-1
 ```
 
 2. Update Helm values with your ECR image:
@@ -133,3 +156,26 @@ kubectl get pods
 kubectl get svc
 kubectl get hpa
 ```
+
+## How to apply Terraform
+
+```bash
+terraform init
+terraform plan
+terraform apply
+```
+
+## How to check Jenkins job
+
+1. Open Jenkins UI (LoadBalancer service in `jenkins` namespace).
+2. Run **seed-job** once to (re)create the pipeline job.
+3. Run **goit-django-docker** and verify in console log:
+   - image build
+   - push to ECR
+   - commit + push to `example-repo`
+
+## How to see result in Argo CD
+
+1. Open Argo CD UI (service `argocd-server` in `argocd` namespace).
+2. Find the `example-app` Application.
+3. Verify it shows **Synced** and the latest Git revision after Jenkins push.
