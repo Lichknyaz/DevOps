@@ -22,5 +22,7 @@ resource "helm_release" "argo_apps" {
     file("${path.module}/values.yaml")
   ]
   depends_on = [helm_release.argo_cd]
+
+  force_update = true
 }
 

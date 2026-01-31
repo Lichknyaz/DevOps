@@ -1,0 +1,1 @@
+{{- /* Repository CRD does not exist in Argo CD; use Secrets or argocd-cm instead. */ -}}

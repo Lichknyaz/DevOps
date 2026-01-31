@@ -35,6 +35,8 @@ spec:
     CHART_REPO_URL = "https://github.com/Lichknyaz/example-repo.git"
     CHART_PATH   = "charts/django-app"
     CHART_VALUES = "values.yaml"
+    COMMIT_EMAIL = "jenkins@example.local"
+    COMMIT_NAME  = "jenkins"
   }
 
   stages {
@@ -54,18 +56,20 @@ spec:
       }
     }
 
-    stage('Update Helm Values Repo') {
+    stage('Update Chart Tag in Git') {
       steps {
         container('git') {
           withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
             sh '''
               set -e
               rm -rf chart-repo
-              git clone https://$GIT_USER:$GIT_TOKEN@github.com/Lichknyaz/example-repo.git chart-repo
+              git clone https://$GIT_USER:$GIT_TOKEN@${CHART_REPO_URL#https://} chart-repo
               cd chart-repo/$CHART_PATH
               sed -i "s/^  tag: .*/  tag: \\"$IMAGE_TAG\\"/" $CHART_VALUES
+              git config user.email "$COMMIT_EMAIL"
+              git config user.name "$COMMIT_NAME"
               git add $CHART_VALUES
-              git -c user.email=jenkins@example.local -c user.name=jenkins commit -m "Update image tag to $IMAGE_TAG"
+              git commit -m "Update image tag to $IMAGE_TAG"
               git push origin main
             '''
           }
@@ -74,3 +78,4 @@ spec:
     }
   }
 }
+
