@@ -1,4 +1,6 @@
 lesson-5/.terraform/
 lesson-7/.terraform/
-lesson-8-9/.terraform/
+lesson-db/.terraform/
 lesson-db-module/.terraform/
+lesson-db-module/terraform.tfstate*
+**/*.tfstate*

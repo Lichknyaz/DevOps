@@ -20,8 +20,8 @@ applications:
 repositories:
   - name: example-app
     url: https://github.com/Lichknyaz/example-repo.git
-    username: Lichknyaz
-    password: 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
+    username: ${GITHUB_USER}
+    password: ${GITHUB_PAT}
 
 repoConfig:
   insecure: "true"

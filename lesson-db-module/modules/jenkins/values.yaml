@@ -37,6 +37,18 @@ controller:
     name: jenkins-sa
     create: false
 
+  containerEnv:
+    - name: GITHUB_USER
+      valueFrom:
+        secretKeyRef:
+          name: github-token
+          key: username
+    - name: GITHUB_PAT
+      valueFrom:
+        secretKeyRef:
+          name: github-token
+          key: password
+
   JCasC:
     configScripts:
       credentials: |
@@ -47,8 +59,8 @@ controller:
                   - usernamePassword:
                       scope: GLOBAL
                       id: github-token
-                      username: LichKnyaz
-                      password: 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
+                      username: ${GITHUB_USER}
+                      password: ${GITHUB_PAT}
                       description: GitHub PAT
       seed-job: |
         jobs:
@@ -61,7 +73,7 @@ controller:
                       url('https://github.com/Lichknyaz/DevOps.git')
                       credentials('github-token')
                     }
-                    branches('*/lesson-8-9')
+                    branches('*/lesson-db')
                   }
                 }
                 steps {
@@ -76,10 +88,10 @@ controller:
                                   url("https://github.com/Lichknyaz/DevOps.git")
                                   credentials("github-token")
                                 }
-                                branches("*/lesson-8-9")
+                                branches("*/lesson-db")
                               }
                             }
-                            scriptPath("lesson-8-9/Jenkinsfile")
+                            scriptPath("lesson-db/Jenkinsfile")
                           }
                         }
                       }

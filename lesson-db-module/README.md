@@ -1,4 +1,4 @@
-# lesson-8-9
+# lesson-db
 
 ## Overview
 
@@ -8,7 +8,7 @@ Terraform configuration for AWS infrastructure (S3 backend, VPC, ECR, EKS) and a
 
 ```
 
-lesson-8-9/
+lesson-db/
 │
 ├── main.tf                  # Головний файл для підключення модулів
 ├── backend.tf               # Налаштування бекенду для стейтів (S3 + DynamoDB)
@@ -131,7 +131,7 @@ terraform output -raw ecr_repository_url
 1. Configure kubectl for EKS:
 
 ```bash
-aws eks update-kubeconfig --name lesson-8-9-eks --region eu-west-1
+aws eks update-kubeconfig --name lesson-db-eks --region eu-west-1
 ```
 
 2. Update Helm values with your ECR image:
