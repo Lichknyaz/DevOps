@@ -73,7 +73,7 @@ controller:
                       url('https://github.com/Lichknyaz/DevOps.git')
                       credentials('github-token')
                     }
-                    branches('*/lesson-db')
+                    branches('*/final-project')
                   }
                 }
                 steps {
@@ -88,10 +88,10 @@ controller:
                                   url("https://github.com/Lichknyaz/DevOps.git")
                                   credentials("github-token")
                                 }
-                                branches("*/lesson-db")
+                                branches("*/final-project")
                               }
                             }
-                            scriptPath("lesson-db/Jenkinsfile")
+                            scriptPath("final-project/Jenkinsfile")
                           }
                         }
                       }

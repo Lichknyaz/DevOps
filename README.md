@@ -1,13 +1,13 @@
-# lesson-db-module
+# final-project
 
 ## Overview
 
-Terraform configuration for AWS infrastructure (S3 backend, VPC, ECR, EKS), Helm charts for Django + CI/CD, and an additional `lesson-db-module` workspace that includes Jenkins, Argo CD, and a reusable RDS/Aurora module.
+Terraform configuration for AWS infrastructure (S3 backend, VPC, ECR, EKS), Helm charts for Django + CI/CD, and an additional `final-project` workspace that includes Jenkins, Argo CD, and a reusable RDS/Aurora module.
 
 ## Project Structure
 
 ```
-lesson-db-module/
+final-project/
 
 │
 ├── main.tf                  # Головний файл для підключення модулів
@@ -164,7 +164,7 @@ kubectl get svc
 kubectl get hpa
 ```
 
-## lesson-db-module notes
+## final-project notes
 
 ### How to apply Terraform
 
@@ -189,7 +189,7 @@ terraform apply
 2. Find the `example-app` Application.
 3. Verify it shows **Synced** and the latest Git revision after Jenkins push.
 
-## RDS Module (lesson-db-module)
+## RDS Module (final-project)
 
 ### Example usage
 

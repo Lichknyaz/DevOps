@@ -1,7 +1,7 @@
 ﻿# Підключаємо модуль для S3 та DynamoDB
 module "s3_backend" {
   source = "./modules/s3_backend"                # Шлях до модуля
-  bucket_name = "terraform-state-bucket-lesson-db-lichknyaz"  # Ім'я S3-бакета
+  bucket_name = "terraform-state-bucket-final-project-lichknyaz"  # Ім'я S3-бакета
   table_name  = "terraform-locks"                # Ім'я DynamoDB
 }
 
@@ -18,14 +18,14 @@ module "vpc" {
 # Підключаємо модуль ECR
 module "ecr" {
   source      = "./modules/ecr"
-  ecr_name    = "lesson-db-django-ecr"
+  ecr_name    = "final-project-django-ecr"
   scan_on_push = true
 }
 
 # EKS cluster in the existing VPC
 module "eks" {
   source                   = "./modules/eks"
-  cluster_name             = "lesson-db-eks"
+  cluster_name             = "final-project-eks"
   cluster_version          = "1.29"
   subnet_ids               = module.vpc.private_subnets
   node_subnet_ids          = module.vpc.private_subnets

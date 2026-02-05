@@ -3,4 +3,7 @@ lesson-7/.terraform/
 lesson-db/.terraform/
 lesson-db-module/.terraform/
 lesson-db-module/terraform.tfstate*
+final-project/.terraform/
+final-project/.terraform/
+final-project/terraform.tfstate*
 **/*.tfstate*

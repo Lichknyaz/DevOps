@@ -1,5 +1,5 @@
 image:
-  repository: "961906078703.dkr.ecr.eu-west-1.amazonaws.com/lesson-db-django-ecr"
+  repository: "961906078703.dkr.ecr.eu-west-1.amazonaws.com/final-project-django-ecr"
   tag: "latest"
   pullPolicy: IfNotPresent
 
