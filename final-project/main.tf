@@ -84,6 +84,14 @@ module "argo_cd" {
     helm = helm
   }
 }
+
+module "monitoring" {
+  source = "./modules/monitoring"
+
+  providers = {
+    helm = helm
+  }
+}
 terraform {
   required_providers {
     aws = {
@@ -108,7 +116,7 @@ module "rds" {
 
   # --- Aurora-only ---
   engine_cluster             = "aurora-postgresql"
-  engine_version_cluster     = "15.3"
+  engine_version_cluster     = "15.8"
   parameter_group_family_aurora = "aurora-postgresql15"
   
 
@@ -139,5 +147,3 @@ module "rds" {
     Project     = "myapp"
   }
 }
-
-

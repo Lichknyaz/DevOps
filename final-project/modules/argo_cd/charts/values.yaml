@@ -19,7 +19,7 @@ applications:
 
 repositories:
   - name: example-app
-    url: https://github.com/Lichknyaz/example-repo.git
+    url: https://github.com/Lichknyaz/DevOps.git
     username: ${GITHUB_USER}
     password: ${GITHUB_PAT}
 

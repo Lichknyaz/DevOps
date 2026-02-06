@@ -2,7 +2,7 @@
 
 ## Overview
 
-Terraform configuration for AWS infrastructure (S3 backend, VPC, ECR, EKS), Helm charts for Django + CI/CD, and an additional `final-project` workspace that includes Jenkins, Argo CD, and a reusable RDS/Aurora module.
+Terraform configuration for AWS infrastructure (S3 backend, VPC, ECR, EKS), Helm charts for Django + CI/CD, and an additional `final-project` workspace that includes Jenkins, Argo CD, Prometheus, Grafana, and a reusable RDS/Aurora module.
 
 ## Project Structure
 
@@ -138,7 +138,7 @@ terraform output -raw ecr_repository_url
 1. Configure kubectl for EKS:
 
 ```bash
-aws eks update-kubeconfig --name lesson-7-eks --region eu-west-1
+aws eks update-kubeconfig --name final-project-eks --region eu-west-1
 ```
 
 2. Update Helm values with your ECR image:
@@ -181,13 +181,29 @@ terraform apply
 3. Run **goit-django-docker** and verify in console log:
    - image build
    - push to ECR
-   - commit + push to `example-repo`
+   - commit + push to `DevOps` repo, `final-project` branch
 
 ### How to see result in Argo CD
 
-1. Open Argo CD UI (service `argocd-server` in `argocd` namespace).
+1. Open Argo CD UI (service `argo-cd-argocd-server` in `argocd` namespace).
 2. Find the `example-app` Application.
 3. Verify it shows **Synced** and the latest Git revision after Jenkins push.
+
+### Monitoring (Prometheus + Grafana)
+
+1. Verify resources:
+
+```bash
+kubectl get all -n monitoring
+```
+
+2. Port-forward Grafana:
+
+```bash
+kubectl -n monitoring port-forward svc/kube-prometheus-stack-grafana 3000:80
+```
+
+3. Open `http://localhost:3000` and check dashboards (e.g., Kubernetes / Compute Resources / Namespace).
 
 ## RDS Module (final-project)
 
@@ -203,13 +219,13 @@ module "rds" {
 
   # Aurora-only
   engine_cluster             = "aurora-postgresql"
-  engine_version_cluster     = "15.3"
+  engine_version_cluster     = "15.8"
   parameter_group_family_aurora = "aurora-postgresql15"
 
   # RDS-only
   engine                     = "postgres"
-  engine_version             = "15.3"
-  parameter_group_family_rds = "postgres15"
+  engine_version             = "17.2"
+  parameter_group_family_rds = "postgres17"
 
   # Common
   instance_class        = "db.t3.medium"
