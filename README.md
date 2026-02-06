@@ -72,7 +72,10 @@ final-project/
 │       │   └── hpa.yaml
 │       ├── Chart.yaml
 │       └── values.yaml     # ConfigMap зі змінними середовища
-
+└──Django
+			 ├── goit\
+			 ├── Dockerfile
+			 └── Jenkinsfile
 
 ```
 
@@ -121,7 +124,7 @@ aws ecr get-login-password --region eu-west-1 | docker login --username AWS --pa
 4. Build and push the Django image:
 
 ```bash
-docker build -t django-app .
+docker build -t django-app -f final-project/Django/Dockerfile final-project/Django
 docker tag django-app:latest <repository-url>:latest
 docker push <repository-url>:latest
 ```
@@ -144,7 +147,7 @@ aws eks update-kubeconfig --name final-project-eks --region eu-west-1
 2. Update Helm values with your ECR image:
 
 ```bash
-# charts/django-app/values.yaml
+# final-project/charts/django-app/values.yaml
 # image:
 #   repository: <repository-url>
 #   tag: latest
@@ -153,7 +156,7 @@ aws eks update-kubeconfig --name final-project-eks --region eu-west-1
 3. Install or upgrade the release:
 
 ```bash
-helm upgrade --install django-app charts/django-app
+helm upgrade --install django-app final-project/charts/django-app
 ```
 
 4. Check resources:
