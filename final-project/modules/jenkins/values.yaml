@@ -91,7 +91,7 @@ controller:
                                 branches("*/final-project")
                               }
                             }
-                            scriptPath("final-project/Jenkinsfile")
+                            scriptPath("final-project/Django/Jenkinsfile")
                           }
                         }
                       }
